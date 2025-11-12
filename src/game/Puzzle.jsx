@@ -17,7 +17,7 @@ const PROG_QUESTIONS = [
 
 const LOGIC_QUESTIONS = [
   { q: 'Что идет следующим в последовательности: 1, 1, 2, 3, 5, 8?', a: '13' },
-  { q: 'У отца Мэри есть пять дочерей: 1. Чача 2. Чече 3. Чичи 4. Чочо. Как зовут пятую дочь?', a: 'Мэри' },
+  { q: 'У отца Мэри есть пять дочерей: 1. Чача 2. Чече 3. Чичи 4. Чочо. Как зовут пятую дочь?', a: 'мэри' },
   { q: 'Что можно сломать, даже если никогда не брал в руки?', a: 'обещание' },
   { q: 'Я легок как перо, но меня нельзя долго удерживать. Что я?', a: 'дыхание' },
   { q: 'Что принадлежит тебе, но другие используют это чаще?', a: 'имя' },
@@ -25,37 +25,73 @@ const LOGIC_QUESTIONS = [
   { q: 'Чем больше из меня берешь, тем больше я становлюсь. Что я?', a: 'яма' }
 ]
 
-export default function Puzzle({ spec, onResult }) {
+export default function Puzzle({ wallMeta, onSolved, level }) {
   const [answer, setAnswer] = useState('')
-  const qset = spec.type === 'prog' ? PROG_QUESTIONS : LOGIC_QUESTIONS
-  const q = useMemo(() => qset[Math.floor(Math.random() * qset.length)], [spec.type, qset])
+  const [feedback, setFeedback] = useState('')
+  
+  // Выбираем тип вопроса в зависимости от типа стены
+  const qset = wallMeta.type === 'prog' ? PROG_QUESTIONS : LOGIC_QUESTIONS
+  
+  // Выбираем случайный вопрос
+  const q = useMemo(() => {
+    return qset[Math.floor(Math.random() * qset.length)]
+  }, [wallMeta.type])
 
-  function submit() {
-    const ok = answer.trim().toLowerCase() === q.a.toLowerCase()
-    onResult(ok)
+  function handleSubmit() {
+    const userAnswer = answer.trim().toLowerCase()
+    const correctAnswer = q.a.toLowerCase()
+    
+    if (userAnswer === correctAnswer) {
+      setFeedback('✓ Правильно!')
+      setTimeout(() => {
+        onSolved()
+      }, 600)
+    } else {
+      setFeedback('✗ Неправильно! Попробуй ещё раз.')
+      setAnswer('')
+    }
   }
 
   function handleKeyPress(e) {
     if (e.key === 'Enter') {
-      submit()
+      handleSubmit()
     }
   }
 
   return (
-    <div className="puzzle-modal">
-      <div className="puzzle-card">
-        <h3>Страж: Реши головоломку, если сможешь!</h3>
-        <p className="puzzle-q">{q.q}</p>
-        <input 
-          value={answer} 
-          onChange={e => setAnswer(e.target.value)} 
+    <div className="puzzle-overlay">
+      <div className="puzzle-content">
+        <h3>
+          {wallMeta.type === 'prog' ? '💻 ПРОГРАММИРОВАНИЕ' : '🧠 ЛОГИКА'}
+        </h3>
+        
+        <div className="puzzle-question">
+          {q.q}
+        </div>
+
+        <input
+          className="puzzle-input"
+          type="text"
+          value={answer}
+          onChange={(e) => {
+            setAnswer(e.target.value)
+            setFeedback('')
+          }}
           onKeyPress={handleKeyPress}
-          placeholder="Введите ответ..." 
+          placeholder="Введи ответ..."
           autoFocus
         />
+
+        {feedback && (
+          <div className={`puzzle-feedback ${feedback.includes('✓') ? 'success' : 'error'}`}>
+            {feedback}
+          </div>
+        )}
+
         <div className="puzzle-controls">
-          <button onClick={submit}>Проверить</button>
-          <button onClick={() => onResult(false)}>Отмена</button>
+          <button onClick={handleSubmit}>
+            Проверить
+          </button>
         </div>
       </div>
     </div>
