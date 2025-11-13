@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { canGuardPass } from './Maze'
 
-// Алгоритм поиска пути (BFS)
 function findPath(maze, start, target, level) {
   const queue = [[start]]
   const visited = new Set()
   visited.add(`${start.x},${start.y}`)
 
   const directions = [
-    { dx: 0, dy: -1 }, // up
-    { dx: 1, dy: 0 },  // right
-    { dx: 0, dy: 1 },  // down
-    { dx: -1, dy: 0 }  // left
+    { dx: 0, dy: -1 },
+    { dx: 1, dy: 0 },
+    { dx: 0, dy: 1 },
+    { dx: -1, dy: 0 }
   ]
 
   while (queue.length > 0) {
@@ -22,7 +21,6 @@ function findPath(maze, start, target, level) {
       return path
     }
 
-    // Перемешиваем направления для случайности
     const shuffledDirections = [...directions].sort(() => Math.random() - 0.5)
 
     for (const dir of shuffledDirections) {
@@ -50,14 +48,12 @@ export default function Guard({ maze, player, level, onPositionUpdate }) {
       if (!mounted) return
 
       setPos(currentPos => {
-        // Используем поиск пути с рандомным выбором направлений
         const path = findPath(maze, currentPos, player, level)
         
         let newPos = currentPos
         if (path.length > 1) {
-          newPos = path[1] // Берём следующую позицию из пути
+          newPos = path[1]
         } else {
-          // Если путь не найден, двигаемся случайно по доступным клеткам
           const directions = [
             { dx: 0, dy: -1 },
             { dx: 1, dy: 0 },
@@ -75,7 +71,7 @@ export default function Guard({ maze, player, level, onPositionUpdate }) {
           }
         }
 
-        if (onPositionUpdate && (newPos.x !== currentPos.x || newPos.y !== currentPos.y)) {
+        if (onPositionUpdate) {
           onPositionUpdate(newPos)
         }
 
@@ -83,8 +79,9 @@ export default function Guard({ maze, player, level, onPositionUpdate }) {
       })
     }
 
-    const speeds = [1500, 1200, 900] // Скорости для уровней 1, 2, 3
-    const interval = setInterval(moveGuard, speeds[level] || 1200)
+    // Уменьшил скорости - страж теперь быстрее
+    const speeds = [1000, 800, 600] // Скорости для уровней 1, 2, 3 (в миллисекундах)
+    const interval = setInterval(moveGuard, speeds[level] || 800)
 
     return () => {
       mounted = false
@@ -92,13 +89,17 @@ export default function Guard({ maze, player, level, onPositionUpdate }) {
     }
   }, [maze, player, level])
 
+  // Позиционирование стража в абсолютной позиции
+  const guardX = pos.x * 30 + 30 + 15 // 30px ячейка + 30px padding сетки + центрирование
+  const guardY = pos.y * 30 + 30 + 15 // 30px ячейка + 30px padding сетки + центрирование
+
   return (
     <div 
       className="guard" 
       style={{ 
         position: 'absolute',
-        left: `${pos.x * 30 + 14}px`,
-        top: `${pos.y * 30 + 14}px`,
+        left: `${guardX}px`,
+        top: `${guardY}px`,
         transform: 'translate(-50%, -50%)'
       }}
     >

@@ -27,12 +27,11 @@ export default function App() {
 
   return (
     <div className="app">
-      {/* СТАРТОВЫЙ ЭКРАН */}
       {screen === 'start' && (
         <div className="screen start-screen">
           <div className="start-content">
-            <h1 className="title">VIOLET LABYRINTH</h1>
-            <p className="subtitle">Лабиринт в компьютере</p>
+            <h1 className="title">ALIVE MAZE</h1>
+            <p className="subtitle">Живой лабиринт</p>
             <button className="btn-start" onClick={onStart}>
               ▶ НАЧАТЬ
             </button>
@@ -41,7 +40,6 @@ export default function App() {
         </div>
       )}
 
-      {/* ЭКРАН ИСТОРИИ */}
       {screen === 'intro' && (
         <div className="screen intro-screen" onClick={() => gotoMenu()}>
           <div className="intro-background">
@@ -65,79 +63,51 @@ export default function App() {
         </div>
       )}
 
-      {/* МЕНЮ УРОВНЕЙ */}
       {screen === 'menu' && (
         <div className="screen menu-screen">
-          <div className="menu-header">
-            <h2>ВЫБЕРИ УРОВЕНЬ</h2>
-            <p className="menu-subtitle">Помоги Алисе выбраться</p>
+          <div className="menu-wrapper">
+            <div className="menu-header">
+              <h2>ВЫБЕРИ УРОВЕНЬ</h2>
+              <p className="menu-subtitle">Помоги Алисе выбраться</p>
+            </div>
+
+            <div className="levels-grid">
+              {[0, 1, 2].map(i => (
+                <div
+                  key={i}
+                  className={`level-card ${completed[i] ? 'completed' : ''}`}
+                  onClick={() => playLevel(i)}
+                >
+                  <div className="level-card-header">
+                    <h3>УРОВЕНЬ {i + 1}</h3>
+                    {completed[i] && <span className="completion-badge">✓</span>}
+                  </div>
+                  <p className="level-description">
+                    {i === 0 && 'Первое испытание. Стена движется, загадка ждёт.'}
+                    {i === 1 && 'Страж появляется. Лабиринт усложняется.'}
+                    {i === 2 && 'Финал. Страж мощнее, стены хитрее.'}
+                  </p>
+                  <div className="difficulty-bar">
+                    <div className="difficulty-fill" style={{ width: `${(i + 1) * 33}%` }}></div>
+                  </div>
+                  <p className="level-footer">
+                    {i === 0 && 'Сложность: Низкая'}
+                    {i === 1 && 'Сложность: Средняя'}
+                    {i === 2 && 'Сложность: Высокая'}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            {completed[0] && completed[1] && completed[2] && (
+              <div className="victory-text">
+                🎉 Алиса победила! Страж заточен в коде. Свобода обретена!
+              </div>
+            )}
           </div>
-
-          <div className="levels-grid">
-            {/* УРОВЕНЬ 1 */}
-            <div
-              className={`level-card ${completed[0] ? 'completed' : ''}`}
-              onClick={() => playLevel(0)}
-            >
-              <div className="level-card-header">
-                <h3>УРОВЕНЬ 1</h3>
-                {completed[0] && <span className="completion-badge">✓</span>}
-              </div>
-              <p className="level-description">
-                Первое испытание. Стена движется, загадка ждёт.
-              </p>
-              <div className="difficulty-bar">
-                <div className="difficulty-fill" style={{ width: '30%' }}></div>
-              </div>
-              <p className="level-footer">Сложность: Низкая</p>
-            </div>
-
-            {/* УРОВЕНЬ 2 */}
-            <div
-              className={`level-card ${completed[1] ? 'completed' : ''}`}
-              onClick={() => playLevel(1)}
-            >
-              <div className="level-card-header">
-                <h3>УРОВЕНЬ 2</h3>
-                {completed[1] && <span className="completion-badge">✓</span>}
-              </div>
-              <p className="level-description">
-                Страж появляется. Лабиринт усложняется.
-              </p>
-              <div className="difficulty-bar">
-                <div className="difficulty-fill" style={{ width: '60%' }}></div>
-              </div>
-              <p className="level-footer">Сложность: Средняя</p>
-            </div>
-
-            {/* УРОВЕНЬ 3 */}
-            <div
-              className={`level-card ${completed[2] ? 'completed' : ''}`}
-              onClick={() => playLevel(2)}
-            >
-              <div className="level-card-header">
-                <h3>УРОВЕНЬ 3</h3>
-                {completed[2] && <span className="completion-badge">✓</span>}
-              </div>
-              <p className="level-description">
-                Финал. Страж мощнее, стены хитрее.
-              </p>
-              <div className="difficulty-bar">
-                <div className="difficulty-fill" style={{ width: '100%' }}></div>
-              </div>
-              <p className="level-footer">Сложность: Высокая</p>
-            </div>
-          </div>
-
-          {completed[0] && completed[1] && completed[2] && (
-            <div className="victory-text">
-              🎉 Алиса победила! Страж заточен в коде. Свобода обретена!
-            </div>
-          )}
         </div>
       )}
 
-      {/* ИГРА */}
       {screen === 'play' && level !== null && (
         <Game
           level={level}

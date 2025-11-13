@@ -335,7 +335,7 @@ export function MazeView({ maze, player }) {
           key={key} 
           className={cls} 
         >
-          {player.x === x && player.y === y && <span className="player">A</span>}
+          {player.x === x && player.y === y && <span className="player">👧</span>}
           {isExitCell && !isWall && <span className="exit-icon">🚪</span>}
           {isGuardWall && <span className="guard-wall-icon">⚡</span>}
         </div>

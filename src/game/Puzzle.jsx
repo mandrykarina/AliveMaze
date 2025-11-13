@@ -25,14 +25,12 @@ const LOGIC_QUESTIONS = [
   { q: 'Чем больше из меня берешь, тем больше я становлюсь. Что я?', a: 'яма' }
 ]
 
-export default function Puzzle({ wallMeta, onSolved, level }) {
+export default function Puzzle({ wallMeta, onSolved, onClose, level }) {
   const [answer, setAnswer] = useState('')
   const [feedback, setFeedback] = useState('')
   
-  // Выбираем тип вопроса в зависимости от типа стены
   const qset = wallMeta.type === 'prog' ? PROG_QUESTIONS : LOGIC_QUESTIONS
   
-  // Выбираем случайный вопрос
   const q = useMemo(() => {
     return qset[Math.floor(Math.random() * qset.length)]
   }, [wallMeta.type])
@@ -61,6 +59,8 @@ export default function Puzzle({ wallMeta, onSolved, level }) {
   return (
     <div className="puzzle-overlay">
       <div className="puzzle-content">
+        <button className="puzzle-close" onClick={onClose}>✕</button>
+        
         <h3>
           {wallMeta.type === 'prog' ? '💻 ПРОГРАММИРОВАНИЕ' : '🧠 ЛОГИКА'}
         </h3>

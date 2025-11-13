@@ -17,21 +17,35 @@
   --bg-darker: #0a0310;
 }
 
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
 body {
   background: linear-gradient(135deg, var(--bg-darker), #1a0f2e);
   color: #e0e0e0;
   font-family: 'Orbitron', 'Rajdhani', 'Courier New', monospace;
-  overflow: hidden;
   height: 100vh;
   width: 100vw;
+  overflow: hidden;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
 }
 
 .app {
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-/* ========== СТАРТОВЫЙ ЭКРАН ========== */
+/* ========== ЭКРАНЫ - ПРАВИЛЬНОЕ ЦЕНТРИРОВАНИЕ ========== */
 .screen {
   width: 100%;
   height: 100%;
@@ -41,9 +55,9 @@ body {
   position: relative;
 }
 
+/* СТАРТОВЫЙ ЭКРАН */
 .start-screen {
   background: linear-gradient(135deg, rgba(15, 5, 21, 0.95), rgba(26, 15, 46, 0.95));
-  overflow: hidden;
 }
 
 .start-bg-effect {
@@ -55,6 +69,7 @@ body {
   background: radial-gradient(circle, rgba(122, 47, 166, 0.15), transparent);
   border-radius: 50%;
   animation: floatSlow 20s ease-in-out infinite;
+  pointer-events: none;
 }
 
 @keyframes floatSlow {
@@ -80,7 +95,6 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  text-shadow: 0 0 40px rgba(200, 140, 255, 0.3);
   animation: glow 2.5s ease-in-out infinite;
 }
 
@@ -115,14 +129,13 @@ body {
 .btn-start:hover {
   transform: scale(1.08) translateY(-3px);
   box-shadow: 0 0 50px rgba(200, 140, 255, 0.8);
-  letter-spacing: 3px;
 }
 
 .btn-start:active {
   transform: scale(0.95);
 }
 
-/* ========== ЭКРАН ИСТОРИИ ========== */
+/* ЭКРАН ИСТОРИИ */
 .intro-screen {
   background: linear-gradient(135deg, rgba(15, 5, 21, 0.98), rgba(26, 15, 46, 0.98));
   cursor: pointer;
@@ -130,8 +143,6 @@ body {
 
 .intro-background {
   position: absolute;
-  top: 0;
-  right: 0;
   width: 100%;
   height: 100%;
   display: flex;
@@ -155,9 +166,6 @@ body {
   position: relative;
   z-index: 10;
   max-width: 700px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
 }
 
 .story-text {
@@ -203,18 +211,22 @@ body {
   50% { opacity: 1; }
 }
 
-/* ========== МЕНЮ УРОВНЕЙ ========== */
+/* МЕНЮ УРОВНЕЙ */
 .menu-screen {
   background: linear-gradient(135deg, rgba(15, 5, 21, 0.95), rgba(26, 15, 46, 0.95));
+}
+
+.menu-wrapper {
+  width: 100%;
+  display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  padding-top: 40px;
-  overflow-y: auto;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
 }
 
 .menu-header {
   text-align: center;
-  margin-bottom: 50px;
 }
 
 .menu-header h2 {
@@ -234,12 +246,11 @@ body {
 
 .levels-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 25px;
-  max-width: 1000px;
-  margin: 0 auto;
+  max-width: 1100px;
+  width: 90%;
   padding: 0 20px;
-  margin-bottom: 40px;
 }
 
 .level-card {
@@ -348,7 +359,6 @@ body {
 
 .victory-text {
   text-align: center;
-  margin-top: 40px;
   padding: 25px;
   background: rgba(70, 204, 113, 0.15);
   border: 2px solid var(--exit);
@@ -358,8 +368,6 @@ body {
   font-weight: 700;
   letter-spacing: 1px;
   max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
   text-shadow: 0 0 10px rgba(70, 204, 113, 0.4);
   animation: victory 0.6s ease;
 }
@@ -451,8 +459,7 @@ body {
 .player {
   font-size: 20px;
   font-weight: bold;
-  color: #a0ffff;
-  text-shadow: 0 0 8px rgba(160, 255, 255, 0.8);
+  color: #fff;
   z-index: 5;
 }
 
@@ -508,43 +515,43 @@ body {
   50% { opacity: 1; }
 }
 
-.bottom-controls {
+/* ========== КНОПКИ ========== */
+.bottom-controls-text {
   position: fixed;
   bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 15px;
+  gap: 30px;
   z-index: 100;
 }
 
-.btn-icon {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-  border: 2px solid var(--accent);
-  color: var(--accent);
-  font-size: 20px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(122, 47, 166, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.btn-icon:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 20px rgba(122, 47, 166, 0.6);
+.btn-text {
+  padding: 12px 32px;
   background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  border: 2px solid var(--accent);
   color: var(--bg-dark);
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Orbitron', monospace;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 2px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(200, 140, 255, 0.4);
+  text-transform: uppercase;
 }
 
-.btn-icon:active {
-  transform: scale(0.95);
+.btn-text:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(200, 140, 255, 0.6);
 }
 
+.btn-text:active {
+  transform: translateY(0);
+}
+
+/* ========== GAME OVER ========== */
 .game-over-overlay {
   position: fixed;
   top: 0;
@@ -624,6 +631,7 @@ body {
   box-shadow: 0 4px 15px rgba(200, 140, 255, 0.4);
 }
 
+/* ========== КОНЕЦ УРОВНЯ ========== */
 .level-finish {
   position: fixed;
   top: 50%;
@@ -646,6 +654,7 @@ body {
   to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
 }
 
+/* ========== ГОЛОВОЛОМКА ========== */
 .puzzle-overlay {
   position: fixed;
   top: 0;
@@ -668,11 +677,41 @@ body {
   max-width: 500px;
   box-shadow: 0 0 40px rgba(200, 140, 255, 0.5);
   animation: slideIn 0.3s ease;
+  position: relative;
+}
+
+.puzzle-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(255, 85, 85, 0.2);
+  border: 1px solid rgba(255, 85, 85, 0.5);
+  color: #ff6b6b;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.puzzle-close:hover {
+  background: rgba(255, 85, 85, 0.4);
+  border-color: #ff6b6b;
+}
+
+.puzzle-close:active {
+  transform: scale(0.9);
 }
 
 .puzzle-content h3 {
   color: var(--accent);
   margin-bottom: 15px;
+  margin-top: 5px;
   font-size: 16px;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -701,28 +740,31 @@ body {
   color: rgba(200, 140, 255, 0.5);
 }
 
-.puzzle-options {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.puzzle-option {
-  padding: 10px;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(200, 140, 255, 0.3);
-  color: #e0e0e0;
+.puzzle-feedback {
+  padding: 12px;
+  margin-bottom: 15px;
   border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 13px;
-  text-align: left;
+  text-align: center;
+  font-weight: 600;
+  font-size: 14px;
+  animation: fadeIn 0.3s ease;
 }
 
-.puzzle-option:hover {
-  background: rgba(200, 140, 255, 0.15);
-  border-color: var(--accent);
+.puzzle-feedback.success {
+  background: rgba(70, 204, 113, 0.2);
+  border: 1px solid var(--exit);
+  color: var(--exit);
+}
+
+.puzzle-feedback.error {
+  background: rgba(255, 85, 85, 0.2);
+  border: 1px solid var(--danger);
+  color: var(--danger);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .puzzle-controls {
@@ -760,6 +802,12 @@ body {
   text-align: center;
 }
 
+@media (max-width: 1024px) {
+  .levels-grid {
+    grid-template-columns: 2fr;
+  }
+}
+
 @media (max-width: 768px) {
   .title { font-size: 48px; }
   .subtitle { font-size: 18px; }
@@ -769,31 +817,4 @@ body {
     grid-template-rows: repeat(15, 24px);
   }
   .cell { width: 24px; height: 24px; }
-}
-
-.puzzle-feedback {
-  padding: 12px;
-  margin-bottom: 15px;
-  border-radius: 6px;
-  text-align: center;
-  font-weight: 600;
-  font-size: 14px;
-  animation: fadeIn 0.3s ease;
-}
-
-.puzzle-feedback.success {
-  background: rgba(70, 204, 113, 0.2);
-  border: 1px solid var(--exit);
-  color: var(--exit);
-}
-
-.puzzle-feedback.error {
-  background: rgba(255, 85, 85, 0.2);
-  border: 1px solid var(--danger);
-  color: var(--danger);
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }
